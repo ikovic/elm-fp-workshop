@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Elm FP Workshop</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div id="app">
+        <!-- we will embed our Elm app here -->
+    </div>
+    <script src="main.js"></script>
+    <script>
+        var node = document.getElementById('app');
+        var app = Elm.App.embed(node);
+    </script>
+</body>
+
+</html>

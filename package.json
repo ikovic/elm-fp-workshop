@@ -1,0 +1,27 @@
+{
+  "name": "elm-fp-workshop",
+  "version": "1.0.0",
+  "description": "Application showing functional programming concepts in Elm",
+  "main": "index.js",
+  "scripts": {
+    "start": "gulp start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ikovic/elm-fp-workshop.git"
+  },
+  "keywords": ["Elm", "FP"],
+  "author": "Ivan Kovic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ikovic/elm-fp-workshop/issues"
+  },
+  "homepage": "https://github.com/ikovic/elm-fp-workshop#readme",
+  "dependencies": {
+    "elm": "^0.18.0",
+    "gulp": "^3.9.1",
+    "gulp-elm": "^0.7.2",
+    "gulp-sass": "^3.1.0",
+    "pushstate-server": "^3.0.1"
+  }
+}
