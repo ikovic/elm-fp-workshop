@@ -4,13 +4,17 @@
   "description": "Application showing functional programming concepts in Elm",
   "main": "index.js",
   "scripts": {
-    "start": "gulp start"
+    "start": "gulp start",
+    "server": "json-server --watch data.json --port 3001"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ikovic/elm-fp-workshop.git"
   },
-  "keywords": ["Elm", "FP"],
+  "keywords": [
+    "Elm",
+    "FP"
+  ],
   "author": "Ivan Kovic",
   "license": "MIT",
   "bugs": {
@@ -22,6 +26,7 @@
     "gulp": "^3.9.1",
     "gulp-elm": "^0.7.2",
     "gulp-sass": "^3.1.0",
+    "json-server": "^0.12.1",
     "pushstate-server": "^3.0.1"
   }
 }

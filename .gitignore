@@ -62,3 +62,6 @@ elm-stuff/
 
 # build artifacts
 build/
+
+# mac os junk
+.DS_Store
