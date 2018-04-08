@@ -7,6 +7,7 @@ After cloning the repository, you should run the following command:
 
 ## Development
 - `npm start` - starts the development server on port 3000
+- `npm run server` - starts the fake API on port 3001
 
 ## Useful resources
 - [Elm Guide](https://guide.elm-lang.org/) - a nice beginner guide to Elm
