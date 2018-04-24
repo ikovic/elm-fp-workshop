@@ -11,4 +11,5 @@ After cloning the repository, you should run the following command:
 
 ## Useful resources
 - [Elm Guide](https://guide.elm-lang.org/) - a nice beginner guide to Elm
+- [Beginning Elm](http://elmprogramming.com/) - even nicer intro to Elm
 - [HTML-to-Elm](http://mbylstra.github.io/html-to-elm/) - HTML in, Elm out
