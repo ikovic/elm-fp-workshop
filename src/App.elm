@@ -4,7 +4,11 @@ import Html exposing (div, img, p, text)
 import Html.Attributes exposing (class, src)
 
 
-logan : { poster : String, rating : Float, title : String, year : number }
+type alias Movie =
+    { poster : String, rating : Float, title : String, year : Int }
+
+
+logan : Movie
 logan =
     { title = "Logan"
     , year = 2017
@@ -13,9 +17,7 @@ logan =
     }
 
 
-renderCard :
-    { poster : String, rating : Float, title : String, year : number }
-    -> Html.Html msg
+renderCard : Movie -> Html.Html msg
 renderCard movie =
     div [ class "card" ]
         [ img [ src movie.poster ]
