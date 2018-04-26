@@ -8,13 +8,31 @@ type alias Movie =
     { poster : String, rating : Float, title : String, year : Int }
 
 
-logan : Movie
-logan =
-    { title = "Logan"
-    , year = 2017
-    , rating = 8.1
-    , poster = "https://images-na.ssl-images-amazon.com/images/M/MV5BMjI1MjkzMjczMV5BMl5BanBnXkFtZTgwNDk4NjYyMTI@._V1_SX300.jpg"
+type alias Model =
+    { movies : List Movie
     }
+
+
+initialModel : { movies : List Movie }
+initialModel =
+    { movies =
+        [ { title = "Logan"
+          , year = 2017
+          , rating = 8.1
+          , poster = "https://images-na.ssl-images-amazon.com/images/M/MV5BMjI1MjkzMjczMV5BMl5BanBnXkFtZTgwNDk4NjYyMTI@._V1_SX300.jpg"
+          }
+        , { title = "The Green Mile"
+          , year = 1999
+          , rating = 8.5
+          , poster = "https://images-na.ssl-images-amazon.com/images/M/MV5BMTUxMzQyNjA5MF5BMl5BanBnXkFtZTYwOTU2NTY3._V1_SX300.jpg"
+          }
+        ]
+    }
+
+
+view : Model -> Html.Html msg
+view model =
+    div [ class "cardHolder" ] (List.map renderCard model.movies)
 
 
 renderCard : Movie -> Html.Html msg
@@ -33,8 +51,15 @@ renderCard movie =
         ]
 
 
-main : Html.Html msg
+update : a -> b -> b
+update msg model =
+    model
+
+
+main : Program Never { movies : List Movie } msg
 main =
-    div [ class "main" ]
-        [ renderCard logan
-        ]
+    Html.beginnerProgram
+        { view = view
+        , update = update
+        , model = initialModel
+        }
