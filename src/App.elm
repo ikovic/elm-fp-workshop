@@ -1,7 +1,9 @@
 module App exposing (..)
 
+import Http
 import Html exposing (div, img, p, text)
 import Html.Attributes exposing (class, src)
+import Json.Decode as Decode exposing (field, list, map4, Decoder, int, string, float)
 
 
 type alias Movie =
@@ -10,29 +12,20 @@ type alias Movie =
 
 type alias Model =
     { movies : List Movie
+    , error : String
     }
 
 
-initialModel : { movies : List Movie }
-initialModel =
-    { movies =
-        [ { title = "Logan"
-          , year = 2017
-          , rating = 8.1
-          , poster = "https://images-na.ssl-images-amazon.com/images/M/MV5BMjI1MjkzMjczMV5BMl5BanBnXkFtZTgwNDk4NjYyMTI@._V1_SX300.jpg"
-          }
-        , { title = "The Green Mile"
-          , year = 1999
-          , rating = 8.5
-          , poster = "https://images-na.ssl-images-amazon.com/images/M/MV5BMTUxMzQyNjA5MF5BMl5BanBnXkFtZTYwOTU2NTY3._V1_SX300.jpg"
-          }
-        ]
-    }
+type Msg
+    = LoadMovies (Result Http.Error (List Movie))
 
 
 view : Model -> Html.Html msg
 view model =
-    div [ class "cardHolder" ] (List.map renderCard model.movies)
+    div []
+        [ div [ class "cardHolder" ] (List.map renderCard model.movies)
+        , p [] [ text model.error ]
+        ]
 
 
 renderCard : Movie -> Html.Html msg
@@ -51,15 +44,45 @@ renderCard movie =
         ]
 
 
-update : a -> b -> b
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    model
+    case msg of
+        LoadMovies (Ok loadedMovies) ->
+            ( { model | movies = loadedMovies }, Cmd.none )
+
+        LoadMovies (Err loadError) ->
+            ( { model | error = toString loadError }, Cmd.none )
 
 
-main : Program Never { movies : List Movie } msg
+main : Program Never Model Msg
 main =
-    Html.beginnerProgram
+    Html.program
         { view = view
         , update = update
-        , model = initialModel
+        , init = init
+        , subscriptions = \_ -> Sub.none
         }
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( { movies = [], error = "" }, getMovies )
+
+
+getMovies : Cmd Msg
+getMovies =
+    Http.send LoadMovies (Http.get "http://localhost:3001/movies" movieListDecoder)
+
+
+movieListDecoder : Decoder (List Movie)
+movieListDecoder =
+    Decode.list movieDecoder
+
+
+movieDecoder : Decoder Movie
+movieDecoder =
+    Decode.map4 Movie
+        (field "poster" Decode.string)
+        (field "rating" Decode.float)
+        (field "title" Decode.string)
+        (field "year" Decode.int)
