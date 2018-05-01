@@ -12,12 +12,31 @@ body {
   font-family: "Lato", Arial, sans-serif;
 }
 
+.layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.genreHolder {
+  width: 240px;
+  margin-right: 16px;
+
+  .checkboxes {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .cardHolder {
   width: 100%;
-  padding: 0 16px;
+  height: 100vh;
+  overflow-y: scroll;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  align-content: flex-start;
   flex-wrap: wrap;
 }
 
@@ -43,7 +62,7 @@ body {
     }
   }
 
-  .card-data {
+  .cardData {
     display: none;
     background: #fff none repeat scroll 0 0;
     height: 100%;
