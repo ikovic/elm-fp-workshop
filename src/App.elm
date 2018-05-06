@@ -23,6 +23,45 @@ type Msg
     | ToggleGenreFilter String
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        LoadMovies (Ok loadedMovies) ->
+            ( { model | movies = loadedMovies }, Cmd.none )
+
+        LoadMovies (Err loadError) ->
+            ( { model | error = toString loadError }, Cmd.none )
+
+        ToggleGenreFilter filterValue ->
+            ( { model | genreFilter = (updateGenreFilter filterValue model.genreFilter) }, Cmd.none )
+
+
+view : Model -> Html.Html Msg
+view model =
+    div [ class "layout" ]
+        [ renderGenreFilter model.genreFilter
+        , div
+            [ class "cardHolder" ]
+            (List.map renderCard (getFilteredMovies model.movies model.genreFilter))
+        , p [] [ text model.error ]
+        ]
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( { movies = [], genreFilter = [], error = "" }, getMovies )
+
+
+main : Program Never Model Msg
+main =
+    Html.program
+        { view = view
+        , update = update
+        , init = init
+        , subscriptions = \_ -> Sub.none
+        }
+
+
 updateGenreFilter : String -> List String -> List String
 updateGenreFilter filterValue filters =
     if List.member filterValue filters then
@@ -54,17 +93,6 @@ getFilteredMovies movies genreFilter =
             List.filter (\movie -> filterMovie movie genreFilter) movies
 
 
-view : Model -> Html.Html Msg
-view model =
-    div [ class "layout" ]
-        [ renderGenreFilter model.genreFilter
-        , div
-            [ class "cardHolder" ]
-            (List.map renderCard (getFilteredMovies model.movies model.genreFilter))
-        , p [] [ text model.error ]
-        ]
-
-
 renderCheckbox : String -> Bool -> Html.Html Msg
 renderCheckbox name isChecked =
     label []
@@ -74,10 +102,10 @@ renderCheckbox name isChecked =
 
 
 renderGenreFilter : List String -> Html.Html Msg
-renderGenreFilter genres =
+renderGenreFilter genreFilter =
     div [ class "genreHolder" ]
         [ h3 [] [ text "Filter by Genre" ]
-        , fieldset [ class "checkboxes" ] (List.map (\filterValue -> (renderCheckbox filterValue False)) genreFilterValues)
+        , fieldset [ class "checkboxes" ] (List.map (\filterValue -> (renderCheckbox filterValue (List.member filterValue genreFilter))) genreFilterValues)
         ]
 
 
@@ -95,34 +123,6 @@ renderCard movie =
                 [ text (toString movie.rating) ]
             ]
         ]
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        LoadMovies (Ok loadedMovies) ->
-            ( { model | movies = loadedMovies }, Cmd.none )
-
-        LoadMovies (Err loadError) ->
-            ( { model | error = toString loadError }, Cmd.none )
-
-        ToggleGenreFilter filterValue ->
-            ( { model | genreFilter = (updateGenreFilter filterValue model.genreFilter) }, Cmd.none )
-
-
-main : Program Never Model Msg
-main =
-    Html.program
-        { view = view
-        , update = update
-        , init = init
-        , subscriptions = \_ -> Sub.none
-        }
-
-
-init : ( Model, Cmd Msg )
-init =
-    ( { movies = [], genreFilter = [], error = "" }, getMovies )
 
 
 getMovies : Cmd Msg
