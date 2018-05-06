@@ -46,7 +46,9 @@ view model =
         [ renderGenreFilter model.genreFilter
         , div
             [ class "cardHolder" ]
-            (List.map renderCard (getFilteredMovies model.movies model.genreFilter))
+            (getFilteredMovies model.movies model.genreFilter
+                |> List.map renderCard
+            )
         , p [] [ text model.error ]
         ]
 
@@ -109,7 +111,15 @@ renderGenreFilter : List Genre -> Html.Html Msg
 renderGenreFilter genreFilter =
     div [ class "genreHolder" ]
         [ h3 [] [ text "Filter by Genre" ]
-        , fieldset [ class "checkboxes" ] (List.map (\filterValue -> (renderCheckbox filterValue (List.member filterValue genreFilter))) genreFilterValues)
+        , fieldset [ class "checkboxes" ]
+            (genreFilterValues
+                |> List.map
+                    (\filterValue ->
+                        (List.member filterValue genreFilter
+                            |> renderCheckbox filterValue
+                        )
+                    )
+            )
         ]
 
 
