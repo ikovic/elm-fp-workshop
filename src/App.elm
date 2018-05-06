@@ -7,13 +7,17 @@ import Html.Events exposing (onClick)
 import Json.Decode as Decode exposing (field, list, map4, Decoder, int, string, float)
 
 
+type alias Genre =
+    String
+
+
 type alias Movie =
-    { poster : String, rating : Float, title : String, year : Int, genre : List String }
+    { poster : String, rating : Float, title : String, year : Int, genre : List Genre }
 
 
 type alias Model =
     { movies : List Movie
-    , genreFilter : List String
+    , genreFilter : List Genre
     , error : String
     }
 
@@ -62,7 +66,7 @@ main =
         }
 
 
-updateGenreFilter : String -> List String -> List String
+updateGenreFilter : String -> List Genre -> List String
 updateGenreFilter filterValue filters =
     if List.member filterValue filters then
         List.filter (\filter -> filter /= filterValue) filters
@@ -75,14 +79,14 @@ genreFilterValues =
     [ "Animation", "Horror", "Comedy", "Drama", "Musical", "Crime", "Thriller", "Action", "Sci-Fi", "Fantasy", "Adventure" ]
 
 
-filterMovie : Movie -> List String -> Bool
+filterMovie : Movie -> List Genre -> Bool
 filterMovie movie genreFilter =
     List.any (\genre -> List.member genre genreFilter) movie.genre
 
 
 getFilteredMovies :
     List Movie
-    -> List String
+    -> List Genre
     -> List Movie
 getFilteredMovies movies genreFilter =
     case genreFilter of
@@ -101,7 +105,7 @@ renderCheckbox name isChecked =
         ]
 
 
-renderGenreFilter : List String -> Html.Html Msg
+renderGenreFilter : List Genre -> Html.Html Msg
 renderGenreFilter genreFilter =
     div [ class "genreHolder" ]
         [ h3 [] [ text "Filter by Genre" ]
