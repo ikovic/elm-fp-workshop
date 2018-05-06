@@ -5,6 +5,8 @@ Application showing functional programming concepts in Elm.
 After cloning the repository, you should run the following command:
 - `npm install`
 
+**Windows** - make sure you are running the command prompt with `administrator` privileges.
+
 ## Development
 - `npm start` - starts the development server on port 3000
 - `npm run server` - starts the fake API on port 3001
