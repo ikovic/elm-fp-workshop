@@ -71,7 +71,7 @@ main =
 updateGenreFilter : String -> List Genre -> List String
 updateGenreFilter filterValue filters =
     if List.member filterValue filters then
-        List.filter (\filter -> filter /= filterValue) filters
+        List.filter ((/=) filterValue) filters
     else
         filterValue :: filters
 
@@ -80,10 +80,13 @@ genreFilterValues : List String
 genreFilterValues =
     [ "Animation", "Horror", "Comedy", "Drama", "Musical", "Crime", "Thriller", "Action", "Sci-Fi", "Fantasy", "Adventure" ]
 
+mapGenreFilterValues : (String -> b) -> List b
+mapGenreFilterValues = flip List.map genreFilterValues
+
 
 filterMovie : Movie -> List Genre -> Bool
-filterMovie movie genreFilter =
-    List.any (\genre -> List.member genre genreFilter) movie.genre
+filterMovie { genre }  =
+    flip List.any genre << flip List.member
 
 
 getFilteredMovies :
@@ -94,9 +97,8 @@ getFilteredMovies movies genreFilter =
     case genreFilter of
         [] ->
             movies
-
         _ ->
-            List.filter (\movie -> filterMovie movie genreFilter) movies
+            List.filter (flip filterMovie genreFilter) movies
 
 
 renderCheckbox : String -> Bool -> Html.Html Msg
@@ -106,20 +108,15 @@ renderCheckbox name isChecked =
         , text name
         ]
 
-
 renderGenreFilter : List Genre -> Html.Html Msg
 renderGenreFilter genreFilter =
+    let
+        renderGenreCheckbox value = renderCheckbox value <| List.member value genreFilter
+    in
     div [ class "genreHolder" ]
         [ h3 [] [ text "Filter by Genre" ]
         , fieldset [ class "checkboxes" ]
-            (genreFilterValues
-                |> List.map
-                    (\filterValue ->
-                        (List.member filterValue genreFilter
-                            |> renderCheckbox filterValue
-                        )
-                    )
-            )
+            <| mapGenreFilterValues renderGenreCheckbox
         ]
 
 
