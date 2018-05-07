@@ -112,15 +112,29 @@ renderGenreFilter genreFilter =
     div [ class "genreHolder" ]
         [ h3 [] [ text "Filter by Genre" ]
         , fieldset [ class "checkboxes" ]
-            (genreFilterValues
-                |> List.map
-                    (\filterValue ->
-                        (List.member filterValue genreFilter
-                            |> renderCheckbox filterValue
-                        )
-                    )
+            (List.map
+                (renderGenreCheckbox << isFilterActive genreFilter)
+                genreFilterValues
             )
+
+        {-
+           V1
+           (\filterValue ->
+                  (List.member filterValue genreFilter
+                      |> renderCheckbox filterValue
+                  )
+              )
+        -}
         ]
+
+renderGenreCheckbox : ( Genre, Bool ) -> Html.Html Msg
+renderGenreCheckbox ( genre, checked ) =
+    renderCheckbox genre checked
+
+
+isFilterActive : List Genre -> Genre -> ( Genre, Bool )
+isFilterActive activeFilters filter =
+    ( filter, List.member filter activeFilters )
 
 
 renderCard : Movie -> Html.Html msg
